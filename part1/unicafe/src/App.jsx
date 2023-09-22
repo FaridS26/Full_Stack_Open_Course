@@ -8,11 +8,10 @@ const Subtitle = ({ subtitle }) => {
   return <h2>{subtitle}</h2>;
 };
 
-const StadiscticLine = ({ text, counter, char }) => {
+const StadiscticLine = ({ text, counter }) => {
   return (
     <div>
       {text}: {counter}
-      {char}
     </div>
   );
 };
@@ -23,7 +22,6 @@ const Button = ({ handleClick, text }) => {
 const App = () => {
   const title = 'Give Feedback';
   const subtitle = 'Statics';
-
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
@@ -37,6 +35,10 @@ const App = () => {
   const increaseByOneBad = () => {
     setBad(bad + 1);
   };
+
+  let all = good + neutral + bad;
+  let avg = (good - bad) / all || 0;
+  let positive = (good / all) * 100 || 0;
   return (
     <>
       <Header title={title} />
@@ -50,9 +52,11 @@ const App = () => {
       <StadiscticLine text={'Good'} counter={good} />
       <StadiscticLine text={'Neutral'} counter={neutral} />
       <StadiscticLine text={'Bad'} counter={bad} />
+      <StadiscticLine text={'All'} counter={all} />
+      <StadiscticLine text={'Average'} counter={avg} />
+      <div>Positive: {positive}%</div>
     </>
   );
 };
-
 
 export default App
