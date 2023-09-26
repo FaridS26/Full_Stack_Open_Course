@@ -1,5 +1,26 @@
 import { useState } from "react";
 
+const Title = ({ title }) => <h2>{title}</h2>;
+
+const PopularAnecdote = ({ votes, anecdotes }) => {
+  const maxVotes = Math.max(...votes) || 0;
+  const popularAnecdotes = anecdotes.filter(
+    (_, index) => votes[index] == maxVotes
+  );
+  if (maxVotes !== 0) {
+    return (
+      <>
+        {popularAnecdotes.map((anecdotePopular, index) => (
+          <div>
+            <p>{anecdotePopular}</p>
+            <p>Has {maxVotes} votes</p>
+          </div>
+        ))}
+      </>
+    );
+  }
+};
+
 const Button = ({ handleClick, text }) => {
   return (
     <>
@@ -26,10 +47,13 @@ const App = () => {
 
   return (
     <>
+      <Title title={'Anecdote of the day'} />
       <p>{anecdotes[selected]}</p>
       <p> Has {votes[selected]} votes</p>
       <Button handleClick={updateVote} text={'Vote'} />
       <Button handleClick={changeSelected} text={'Next Anecdote'} />
+      <Title title={'Anecdote with most votes'} />
+      <PopularAnecdote votes={votes} anecdotes={anecdotes} />
     </>
   );
 };
