@@ -16,10 +16,7 @@ const Content = ({ parts }) => {
 };
 
 const Exercise = ({ parts }) => {
-  let sum = 0;
-  for (let i = 0; i < parts.length; i++) {
-    sum += parts[i].exercises;
-  }
+  const sum = parts.reduce((sum, part) => sum + part.exercises, 0);
   return (
     <>
       <h3>Total of {sum} exercises</h3>
