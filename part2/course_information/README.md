@@ -1,4 +1,11 @@
-const Header = ({ name }) => (
+# Course Information
+
+### Exercise 2.1: Course Information Step 6
+<details>
+  <summary>Click to view the code</summary>
+
+```jsx
+  const Header = ({ name }) => (
   <>
     <header>
       <h1>{name}</h1>
@@ -50,3 +57,5 @@ const App = () => {
 };
 
 export default App;
+```
+</details>
