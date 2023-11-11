@@ -12,11 +12,14 @@ const Contacts = ({ persons }) => {
 };
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '57486231' },
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' },
   ]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
-
+  const [newSearch, setNewSearch] = useState('');
   const addPerson = (event) => {
     console.log(newNumber);
     event.preventDefault();
@@ -40,9 +43,23 @@ const App = () => {
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
   };
+  const handleSearchChange = (event) => {
+    setNewSearch(event.target.value);
+  };
+
+  const filterSearch = persons.filter((person) =>
+    person.name.toLowerCase().includes(newSearch.toLowerCase())
+  );
+
   return (
     <div>
       <Title title={'Phonebook'} />
+      <div>
+        <p>
+          Filter show with <input type="text" onChange={handleSearchChange} />
+        </p>
+      </div>
+      <Title title={'Add a new'} />
       <form onSubmit={addPerson}>
         <div>
           Name:{' '}
@@ -67,7 +84,7 @@ const App = () => {
         </div>
       </form>
       <Title title={'Numbers'} />
-      <Contacts persons={persons} />
+      <Contacts persons={filterSearch} />
     </div>
   );
 };
