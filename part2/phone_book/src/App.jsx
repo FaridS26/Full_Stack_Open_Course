@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Title from './components/Title';
 import Filter from './components/Filter';
 import Contacts from './components/Contacts';
+import Notification from './components/Notification';
 import personService from './services/persons';
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [newSearch, setNewSearch] = useState('');
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const getContactsHook = () => {
     personService.getAll().then((initialPersons) => {
@@ -28,6 +30,10 @@ const App = () => {
     if (isContactExist.length === 0 && newNumber !== '') {
       personService.create(PersonObject).then((newPerson) => {
         setPersons(persons.concat(newPerson));
+        setSuccessMessage(`Added ${newName}`);
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 5000);
         setNewName('');
         setNewNumber('');
       });
@@ -80,6 +86,7 @@ const App = () => {
       </div>
       <Filter persons={persons} search={newSearch} />
       <Title title={'Add a new'} />
+      <Notification message={successMessage} />
       <form onSubmit={addPerson}>
         <div>
           Name:{' '}
