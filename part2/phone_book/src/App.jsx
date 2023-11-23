@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
+import Title from './components/Title';
+import Filter from './components/Filter';
+import Contacts from './components/Contacts';
 
-const Title = ({ title }) => <h2>{title}</h2>;
-
-const Contacts = ({ persons }) => {
-  const contacts = persons.map((person) => (
-    <li key={person.name}>
-      {person.name} - {person.number}
-    </li>
-  ));
-  return <ul>{contacts}</ul>;
-};
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456' },
@@ -20,8 +13,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [newSearch, setNewSearch] = useState('');
+
   const addPerson = (event) => {
-    console.log(newNumber);
     event.preventDefault();
     const isContactExist = persons.filter((person) => person.name === newName);
     if (isContactExist.length === 0 && newNumber !== '') {
@@ -47,10 +40,6 @@ const App = () => {
     setNewSearch(event.target.value);
   };
 
-  const filterSearch = persons.filter((person) =>
-    person.name.toLowerCase().includes(newSearch.toLowerCase())
-  );
-
   return (
     <div>
       <Title title={'Phonebook'} />
@@ -59,6 +48,7 @@ const App = () => {
           Filter show with <input type="text" onChange={handleSearchChange} />
         </p>
       </div>
+      <Filter persons={persons} search={newSearch} />
       <Title title={'Add a new'} />
       <form onSubmit={addPerson}>
         <div>
@@ -84,7 +74,7 @@ const App = () => {
         </div>
       </form>
       <Title title={'Numbers'} />
-      <Contacts persons={filterSearch} />
+      <Contacts persons={persons} />
     </div>
   );
 };

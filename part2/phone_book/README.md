@@ -112,7 +112,7 @@ export default App;
   ```
 </details>
 
-### Exercise: 2.8 Phone Book Step 3
+### Exercise 2.8: Phone Book Step 3
 <details>
 <summary>Click to view the code</summary>
 
@@ -194,4 +194,105 @@ const App = () => {
 export default App;
 ```
 
+</details>
+
+### Exercise 2.9: Phone Book Step 4
+
+<details>
+<summary>Click to view the code</summary>
+
+```jsx
+import React, { useState } from 'react';
+
+const Title = ({ title }) => <h2>{title}</h2>;
+
+const Contacts = ({ persons }) => {
+  const contacts = persons.map((person) => (
+    <li key={person.name}>
+      {person.name} - {person.number}
+    </li>
+  ));
+  return <ul>{contacts}</ul>;
+};
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' },
+  ]);
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [newSearch, setNewSearch] = useState('');
+  const addPerson = (event) => {
+    console.log(newNumber);
+    event.preventDefault();
+    const isContactExist = persons.filter((person) => person.name === newName);
+    if (isContactExist.length === 0 && newNumber !== '') {
+      const PersonObject = {
+        name: newName,
+        number: newNumber,
+      };
+
+      setPersons(persons.concat(PersonObject));
+      setNewName('');
+      setNewNumber('');
+    } else {
+      alert(`${newName} is already added to phonebook`);
+    }
+  };
+  const handleNameChange = (event) => {
+    setNewName(event.target.value);
+  };
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
+  };
+  const handleSearchChange = (event) => {
+    setNewSearch(event.target.value);
+  };
+
+  const filterSearch = persons.filter((person) =>
+    person.name.toLowerCase().includes(newSearch.toLowerCase())
+  );
+
+  return (
+    <div>
+      <Title title={'Phonebook'} />
+      <div>
+        <p>
+          Filter show with <input type="text" onChange={handleSearchChange} />
+        </p>
+      </div>
+      <Title title={'Add a new'} />
+      <form onSubmit={addPerson}>
+        <div>
+          Name:{' '}
+          <input
+            type="text"
+            value={newName}
+            onChange={handleNameChange}
+            required
+          />
+        </div>
+        <div>
+          Number:{' '}
+          <input
+            type="number"
+            value={newNumber}
+            onChange={handleNumberChange}
+            required
+          />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      <Title title={'Numbers'} />
+      <Contacts persons={filterSearch} />
+    </div>
+  );
+};
+
+export default App;
+```
 </details>
