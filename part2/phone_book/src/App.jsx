@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Title from './components/Title';
 import Filter from './components/Filter';
 import Contacts from './components/Contacts';
-import axios from 'axios';
+import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,9 +11,7 @@ const App = () => {
   const [newSearch, setNewSearch] = useState('');
 
   const getContactsHook = () => {
-    console.log('effect');
-    axios.get('http://localhost:3001/persons').then((response) => {
-      console.log('promise fulfilled');
+    personService.getAll().then((response) => {
       setPersons(response.data);
     });
   };
@@ -28,13 +26,11 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      axios
-        .post('http://localhost:3001/persons', PersonObject)
-        .then((response) => {
-          setPersons(persons.concat(response.data));
-          setNewName('');
-          setNewNumber('');
-        });
+      personService.create(PersonObject).then((response) => {
+        setPersons(persons.concat(response.data));
+        setNewName('');
+        setNewNumber('');
+      });
     } else {
       alert(`${newName} is already added to phonebook`);
     }
