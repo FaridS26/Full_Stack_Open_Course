@@ -11,8 +11,8 @@ const App = () => {
   const [newSearch, setNewSearch] = useState('');
 
   const getContactsHook = () => {
-    personService.getAll().then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   };
 
@@ -26,8 +26,8 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      personService.create(PersonObject).then((response) => {
-        setPersons(persons.concat(response.data));
+      personService.create(PersonObject).then((newPerson) => {
+        setPersons(persons.concat(newPerson));
         setNewName('');
         setNewNumber('');
       });
@@ -35,6 +35,14 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
     }
   };
+  const deleteContact = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personService.deleteById(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
+  };
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -68,7 +76,7 @@ const App = () => {
         <div>
           Number:{' '}
           <input
-            type="number"
+            type="text"
             value={newNumber}
             onChange={handleNumberChange}
             required
@@ -79,7 +87,7 @@ const App = () => {
         </div>
       </form>
       <Title title={'Numbers'} />
-      <Contacts persons={persons} />
+      <Contacts persons={persons} onDeleteContact={deleteContact} />
     </div>
   );
 };
