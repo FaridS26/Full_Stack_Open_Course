@@ -21,18 +21,35 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
     const isContactExist = persons.filter((person) => person.name === newName);
+    const PersonObject = {
+      name: newName,
+      number: newNumber,
+    };
     if (isContactExist.length === 0 && newNumber !== '') {
-      const PersonObject = {
-        name: newName,
-        number: newNumber,
-      };
       personService.create(PersonObject).then((newPerson) => {
         setPersons(persons.concat(newPerson));
         setNewName('');
         setNewNumber('');
       });
-    } else {
-      alert(`${newName} is already added to phonebook`);
+    } else if (
+      isContactExist.length === 1 &&
+      isContactExist.number !== newNumber
+    ) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const updateId = isContactExist[0].id;
+        personService.updateById(updateId, PersonObject).then((response) => {
+          const updatedPersons = persons.map((person) =>
+            person.id === updateId ? response : person
+          );
+          setPersons(updatedPersons);
+          setNewName('');
+          setNewNumber('');
+        });
+      }
     }
   };
   const deleteContact = (id, name) => {
