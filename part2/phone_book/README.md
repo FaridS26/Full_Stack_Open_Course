@@ -440,11 +440,13 @@ const App = () => {
 
 export default App;
 ```
-
 </details>
 
-### Exercise 2.10: Phone Book Step 5
-In this part, you should execute the command 'npm run server' to start the server using the server json.
+
+**_NOTE:_**  👀👀 From this part, you should execute the command 'npm run server' to start the server using the server json. 👀👀
+
+### Exercise 2.11: Phone Book Step 6
+
 <details>
 <summary>Click to view the code</summary>
 
