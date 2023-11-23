@@ -10,7 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [newSearch, setNewSearch] = useState('');
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [status, setStatus] = useState(null);
 
   const getContactsHook = () => {
     personService.getAll().then((initialPersons) => {
@@ -30,10 +31,12 @@ const App = () => {
     if (isContactExist.length === 0 && newNumber !== '') {
       personService.create(PersonObject).then((newPerson) => {
         setPersons(persons.concat(newPerson));
-        setSuccessMessage(`Added ${newName}`);
+        setMessage(`Added ${newName}`);
+        setStatus('success');
         setTimeout(() => {
-          setSuccessMessage(null);
-        }, 5000);
+          setMessage(null);
+          setStatus(null);
+        }, 3000);
         setNewName('');
         setNewNumber('');
       });
@@ -47,14 +50,26 @@ const App = () => {
         )
       ) {
         const updateId = isContactExist[0].id;
-        personService.updateById(updateId, PersonObject).then((response) => {
-          const updatedPersons = persons.map((person) =>
-            person.id === updateId ? response : person
-          );
-          setPersons(updatedPersons);
-          setNewName('');
-          setNewNumber('');
-        });
+        personService
+          .updateById(updateId, PersonObject)
+          .then((response) => {
+            const updatedPersons = persons.map((person) =>
+              person.id === updateId ? response : person
+            );
+            setPersons(updatedPersons);
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch((error) => {
+            setMessage(
+              `Information of ${newName} has already been removed from server`
+            );
+            setStatus('error');
+            setTimeout(() => {
+              setMessage(null);
+              setStatus(null);
+            }, 3000);
+          });
       }
     }
   };
@@ -79,6 +94,7 @@ const App = () => {
   return (
     <div>
       <Title title={'Phonebook'} />
+      <Notification message={message} status={status} />
       <div>
         <p>
           Filter show with <input type="text" onChange={handleSearchChange} />
@@ -86,7 +102,6 @@ const App = () => {
       </div>
       <Filter persons={persons} search={newSearch} />
       <Title title={'Add a new'} />
-      <Notification message={successMessage} />
       <form onSubmit={addPerson}>
         <div>
           Name:{' '}
